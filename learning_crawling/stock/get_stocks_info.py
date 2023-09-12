@@ -3,21 +3,21 @@ from bs4 import BeautifulSoup
 import time
 
 # 사용자에게 보여지는 메뉴
-def prtmenu(read_file, append_file) :
+def prtmenu(read_file) :
     print("1번 종목확인    2번 종목추가    3번 종목상황출력")
     choice = input("메뉴선택 => ")
     if choice == '1':
-        check_stock(read_file)
+        check_stock(read_file)                      # 파일에 저장되어 있는 주식의 종류를 가져오는 함수 호출
     elif choice == '2':
-        add_stock(append_file)
+        add_stock(read_file)    # 주식 종목을 추가하는 함수 호출
     elif choice == '3':
-        prt_stock_info(read_file)
+        prt_stock_info(read_file)                  # 주식 정보를 출력하는 함수 호출
     else:
-        stop = input("나가시겠습니까? [네/아니요] =>")
-        if stop == '네':
-            return 'stop'
+        stop = input("나가시겠습니까? [네/아니요] =>")      # 1, 2, 3 이외의 입력인 경우 나가는지 물어본다.
+        if stop == '네':                                # 나가는 경우 stop문자 반환
+            return 'stop'               
         elif stop != '아니요':
-            print("잘못된 입력")
+            print("잘못된 입력")                    # 네, 아니요가 아닌 답변인 경우 무시하고 재실행
         
         
 
@@ -25,18 +25,22 @@ def prtmenu(read_file, append_file) :
 def check_stock(file_ob1):
     for i in file_ob1: # 한 줄씩 출력
         item = i.strip().split(':') # 한 줄 당 리스트로 만들고 :를 기준으로 항목을 나눈다.
-        result[item[0]] = item[1]
-    for key, value in result.items() : 
+        stock_dict[item[0]] = item[1]
+    for key, value in stock_dict.items() : 
         print(f"{key} : {value}")
 
 
 
 
 # 2번 선택시 실행 함수
-def add_stock(file_ob2):
+def add_stock(read_file):
     key = input("종목이름 입력 => ")
     value = input("종목코드 입력 => ")
-    file_ob2.write(f'\n{key}:{value}')
+    with open('D:/python_web_crawling/learning_crawling/stock/stock_items.txt', 'a', encoding='UTF-8') as append_file:
+        append_file.write(f'\n{key}:{value}')
+    for items in read_file:
+        item = items.strip().split(':')
+        stock_dict[item[0]] = item[1]
     print("종목 입력 완료")
 
 
@@ -63,29 +67,35 @@ def prt_stock_info(file_ob3):
     if save == '네':
         stock_name = input("주식명 입력 => ")
         save_result(stock_name, result)
+        print("저장 완료")
     elif save != '아니요':
         print("잘못된 입력")
     
 
 def save_result(stock_name, result_ob) :
-    with open('D:\python_web_crawling\learning_crawling\stock/save_stock_info.txt', 'a', encoding='UTF-8') as save_file:
-        save_file.write(stock_name + "\n")
+    with open('D:/python_web_crawling/learning_crawling/stock/save_stock_info.txt', 'a', encoding='UTF-8') as save_file:
+        tm = time.strftime("%Y년 %m월 %d일  %H : %M")
+        save_file.write("주식명 : " + stock_name + "\n" + tm + "\n\n")
         for key, value in result_ob.items():
             save_file.write(f"{key} : {value}\n")
-        print()
+    print("\n")
     
 
 
 
+stock_dict = {} # 저장된 주식을 담아올 딕셔너리
+result = {}        # 현재 상황을 담아올 딕셔너리
 
-result = {}     # 결과를 담을 딕셔너리 
-# 실행구간
+# 일기 전용 파일
 read_file = open('D:/python_web_crawling/learning_crawling/stock/stock_items.txt', 'r', encoding='UTF-8')
-append_file = open('D:/python_web_crawling/learning_crawling/stock/stock_items.txt', 'a', encoding='UTF-8')
+
+# 실행 구간
 while True:
-    stop = prtmenu(read_file, append_file)
-    if stop == "stop":
+    stop = prtmenu(read_file) # 기본적으로 메뉴를 출력하는 함수 호출
+    if stop == "stop": # 반환값이 stop이면 반복 탈출
+        # 반복문을 나가기 전에 열린 파일들은 닫고 탈출
+        read_file.close()
         break
-    result.clear()
-read_file.close()
-append_file.close()
+
+
+
