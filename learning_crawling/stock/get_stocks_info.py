@@ -76,9 +76,10 @@ def prt_stock_info(file_ob3):
 # 주식의 상황을 저장하는 함수
 def save_result(stock_name, img, result_ob) :
     with open('D:/python_web_crawling/learning_crawling/stock/save_stock_info.txt', 'a', encoding='UTF-8') as save_file:
-        urllib.request.urlretrieve(img, f'D:/python_web_crawling/learning_crawling/stock/사진저장/{stock_name}')
-        tm = time.strftime("%Y년 %m월 %d일  %H : %M") 
+        # 사진을 저장하는 코드
+        urllib.request.urlretrieve(img, f'D:/python_web_crawling/learning_crawling/stock/사진저장/{stock_name}.png')
         # 저장 시간
+        tm = time.strftime("%Y년 %m월 %d일  %H : %M") 
         save_file.write("\n주식명 : " + stock_name + "\n" + tm + "\n\n")
         for key, value in result_ob.items():
             save_file.write(f"{key} : {value}\n")
