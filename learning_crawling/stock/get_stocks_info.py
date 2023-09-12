@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import time
+import urllib.request
 
 # 사용자에게 보여지는 메뉴
 def prtmenu(read_file) :
@@ -65,15 +66,17 @@ def prt_stock_info(file_ob3):
     save = input("저장하시겠습니까? [네/아니요] => ")
     if save == '네':
         stock_name = input("주식명 입력 => ")
-        save_result(stock_name, result)  # 저장 함수 호출
+        img = souped_stock.select('#img_chart_area')[0]['src']
+        save_result(stock_name, img, result)  # 저장 함수 호출
         print("저장 완료")
     elif save != '아니요':
         print("잘못된 입력")
     
 
 # 주식의 상황을 저장하는 함수
-def save_result(stock_name, result_ob) :
+def save_result(stock_name, img, result_ob) :
     with open('D:/python_web_crawling/learning_crawling/stock/save_stock_info.txt', 'a', encoding='UTF-8') as save_file:
+        urllib.request.urlretrieve(img, f'D:/python_web_crawling/learning_crawling/stock/사진저장/{stock_name}')
         tm = time.strftime("%Y년 %m월 %d일  %H : %M") 
         # 저장 시간
         save_file.write("\n주식명 : " + stock_name + "\n" + tm + "\n\n")
