@@ -49,7 +49,7 @@ img_src = img['src'] # 딕셔너리형으로 되어 있다.
 # 가져온 이미지를 저장하려면 
 import urllib.request
 # 이미지를 가져와서 내가 지정한 파일명으로 저장해주는 코드
-
+urllib.request.urlretrieve(img_src, '저장경로/이미지 제목')
 # 4. 여러 주식 정보를 동시에 가져오고 싶은 경우
 # url의 변하는 부분을 확인한다.  
 
@@ -89,8 +89,33 @@ for i in range(200):
     print(f"시간 : {dt}")
     print(f'종가 : {dict_[0][0]}')  # 종가가 어디에 적혀있는지 확인 후 경로 적어주기
 
+# 7. 간단한 시간 관리 라이브러리
+# 현재 시간을 출력
+now = time.time() # epoch 시간으로 출력된다.
+# 처리 시간과 종료 시간의 차이를 알 수 있다.
 
+# 현재 ctime을 출력하는 방법
+now = time.ctime() # 사람이 알아 볼 수 있는 시간으로 출력 
 
+# 시간의 일부만 출력하고 싶다.
+local_time = time.localtime() # 각 시간의 자료형이 저장됨
+hour = local_time.tm_hour # 시간만 뽑아냄
+minute = local_time.tm_min # 분만 뽑아냄
+
+# 내 형식대로 시간을 표현하고 싶다.
+# localtime(이 안에 epoch 시간을 넣어도 됨)
+str_time = time.strftime('%Y년 %m월 %d일 %H : %M : %S', time.localtime())
+
+# 더 쉽게 사람이 알아보는 시간으로
+import datetime
+date = datetime.datetime(2023, 9, 12, 12, 30, 45) # 내가 원하는 시간을 만듦
+now = datetime.datetime.now() # 현재 시간을 출력
+
+# 8. 간단한 문자 포맷팅
+name = 'LIM'
+print("%s 안녕하세요" %name)
+print(f"{name} 안녕하세요")
+print("{0} 안녕하세요".format(name))
 
 
 
