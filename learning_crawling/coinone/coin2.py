@@ -11,21 +11,21 @@ def prt_menu(url):
     data = requests.get(url)
     data_dict = json.loads(data.content)
     open_time = time.strftime("%Y년 %m월 %d일  %H : %M", time.localtime(data_dict['body']['candles'][0]['dt']/1000))
-    open_rate = "{0:,}".format( int(data_dict['body']['candles'][0]['open'].replace(".0000",""))) + "원"
+    open_rate = data_dict['body']['candles'][0]['open'] + "원"
     close_time = time.strftime("%Y년 %m월 %d일  %H : %M", time.localtime(data_dict['body']['candles'][-1]['dt']/1000))
-    close_rate = "{0:,}".format( int(data_dict['body']['candles'][-1]['open'].replace(".0000",""))) + "원"
+    close_rate = data_dict['body']['candles'][-1]['open']+ "원"
     result.extend([open_time, open_rate,close_time, close_rate])
     return result
 
 def prt_result(url):
     data = requests.get(url)
     data_dict = json.loads(data.content)
-    for i in range(200):
+    for i in range(len(data_dict['body']['candles'])):
         time_ = time.strftime("%Y년 %m월 %d일  %H:%M", time.localtime(data_dict['body']['candles'][i]['dt']/1000))
-        open_ =  '{:,}'.format(int(data_dict['body']['candles'][i]['open'].replace(".0000",""))) + "원"
-        low_ =  '{:,}'.format(int(data_dict['body']['candles'][i]['low'].replace(".0000",""))) + "원"
-        high_ = '{:,}'.format(int(data_dict['body']['candles'][i]['high'].replace(".0000",""))) + "원"
-        close_ =  '{:,}'.format(int(data_dict['body']['candles'][i]['close'].replace(".0000",""))) + "원"
+        open_ =  data_dict['body']['candles'][i]['open'] + "원"
+        low_ =  data_dict['body']['candles'][i]['low']+ "원"
+        high_ = data_dict['body']['candles'][i]['high'] + "원"
+        close_ =  data_dict['body']['candles'][i]['close'] + "원"
         if i % 10 == 0 :
             print("\n")
 
@@ -46,22 +46,22 @@ t = []
 
 # 이더리움의 코인 url
 url = [
-f"https://api-gateway.coinone.co.kr/exchange/chart/v1/KRW/{code}?lastDt=1693864800000&interval={'1H'}&1694582045646",
-f"https://api-gateway.coinone.co.kr/exchange/chart/v1/KRW/{code}?lastDt=1693144800000&interval={'1H'}&1694582048204",
-f"https://api-gateway.coinone.co.kr/exchange/chart/v1/KRW/{code}?lastDt=1692424800000&interval={'1H'}&1694582048712",
-f"https://api-gateway.coinone.co.kr/exchange/chart/v1/KRW/{code}?lastDt=1691704800000&interval={'1H'}&1694582049091",
-f"https://api-gateway.coinone.co.kr/exchange/chart/v1/KRW/{code}?lastDt=1690984800000&interval={'1H'}&1694582049612",
-f"https://api-gateway.coinone.co.kr/exchange/chart/v1/KRW/{code}?lastDt=1690264800000&interval={'1H'}&1694582050066",
-f"https://api-gateway.coinone.co.kr/exchange/chart/v1/KRW/{code}?lastDt=1689544800000&interval={'1H'}&1694582051322",
-f"https://api-gateway.coinone.co.kr/exchange/chart/v1/KRW/{code}?lastDt=1688824800000&interval={'1H'}&1694582051863",
+f"https://api-gateway.coinone.co.kr/exchange/chart/v1/KRW/{code}?lastDt=1687384800000&interval={'1H'}&1694582053341",
 f"https://api-gateway.coinone.co.kr/exchange/chart/v1/KRW/{code}?lastDt=1688104800000&interval={'1H'}&1694582052562",
-f"https://api-gateway.coinone.co.kr/exchange/chart/v1/KRW/{code}?lastDt=1687384800000&interval={'1H'}&1694582053341"
+f"https://api-gateway.coinone.co.kr/exchange/chart/v1/KRW/{code}?lastDt=1688824800000&interval={'1H'}&1694582051863",
+f"https://api-gateway.coinone.co.kr/exchange/chart/v1/KRW/{code}?lastDt=1689544800000&interval={'1H'}&1694582051322",
+f"https://api-gateway.coinone.co.kr/exchange/chart/v1/KRW/{code}?lastDt=1690264800000&interval={'1H'}&1694582050066",
+f"https://api-gateway.coinone.co.kr/exchange/chart/v1/KRW/{code}?lastDt=1690984800000&interval={'1H'}&1694582049612",
+f"https://api-gateway.coinone.co.kr/exchange/chart/v1/KRW/{code}?lastDt=1691704800000&interval={'1H'}&1694582049091",
+f"https://api-gateway.coinone.co.kr/exchange/chart/v1/KRW/{code}?lastDt=1692424800000&interval={'1H'}&1694582048712",
+f"https://api-gateway.coinone.co.kr/exchange/chart/v1/KRW/{code}?lastDt=1693144800000&interval={'1H'}&1694582048204",
+f"https://api-gateway.coinone.co.kr/exchange/chart/v1/KRW/{code}?lastDt=1693864800000&interval={'1H'}&1694582045646"
 ]
 
 
 # 멀티 스레딩
 # 멀티 프로세싱 : 여러개의 파이썬 실행창 띄우기
-# 멀티 스레딩 : cpu 병렬 처리 
+# 멀티 스레딩 : cpu 병렬 처리
 # 병목현상 : 프로세스 하나가 변수 등을 사용중이라서 다른 프로세스들이 이용 못하고 기다리는 현상
 pool = Thread(4)  # 사용할 프로세스의 개수를 넣어 줌
 result = pool.map(prt_menu, url) # url 요소를 prt_open함수에 하나씩 적용
@@ -79,5 +79,5 @@ for i in range(len(result)):
     print(f"종료 가격 : {result[i][3]}\n")
     print()
 
-choice = int(input(" => "))
+choice = int(input("몇 일 데이터를 보시겠습니까? => "))
 prt_result(url[choice-1])

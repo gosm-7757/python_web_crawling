@@ -5,5 +5,4 @@
 클레이튼:KLAY
 위믹스:WEMIX
 이오스:EOS
-사이버커넥트:CYBER
 샌드박스:SAND
