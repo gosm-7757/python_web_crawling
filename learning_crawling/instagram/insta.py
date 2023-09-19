@@ -38,27 +38,27 @@ driver.implicitly_wait(10) # 요소가 안보이면 10초만 기다려봐라 (ti
 first_img = driver.find_element(By.CSS_SELECTOR, "._aagw")
 first_img.click()
 
+
+img_url = []
 # 사진 저장
-이미지 = driver.find_element(By.CSS_SELECTOR, "._aagu .x5yr21d").get_attribute('src')
+이미지 = driver.find_element(By.CSS_SELECTOR, "._aagu ._aagv img").get_attribute('src')
 print(이미지)
-urllib.request.urlretrieve(이미지, 'D:/python_web_crawling/learning_crawling/instagram/사진저장/첫번째 사진.jpg')
+img_url.append(이미지)
+urllib.request.urlretrieve(img_url[0], 'D:/python_web_crawling/learning_crawling/instagram/사진저장/첫번째 사진.jpg')
 time.sleep(2)
 # 다음 버튼 누름
-next_ = driver.find_element(By.CSS_SELECTOR, "._abl-").click()
+driver.find_element(By.CSS_SELECTOR, "._abl-").click()
 
-이미지 = driver.find_element(By.CSS_SELECTOR, "._aagu .x5yr21d").get_attribute('src')
-print(이미지)
-urllib.request.urlretrieve(이미지, 'D:/python_web_crawling/learning_crawling/instagram/사진저장/두번째 사진.jpg')
+이미지 = driver.find_element(By.CSS_SELECTOR, "._aagu ._aagv img").get_attribute('src')
+print("\n" + 이미지)
+img_url.append(이미지)
+urllib.request.urlretrieve(img_url[1], 'D:/python_web_crawling/learning_crawling/instagram/사진저장/두번째 사진.jpg')
 time.sleep(2)
-next_ = driver.find_element(By.CSS_SELECTOR, "._abl-").click()
 
-이미지 = driver.find_element(By.CSS_SELECTOR, "._aagu .x5yr21d").get_attribute('src')
-print(이미지)
-urllib.request.urlretrieve(이미지, 'D:/python_web_crawling/learning_crawling/instagram/사진저장/세번째 사진.jpg')
-
-
-
-
+if img_url[0] != img_url[1] : 
+    print("성공")
+# 다음 버튼 누름
+driver.find_element(By.CSS_SELECTOR, "._abl-").click()
 
 
 
