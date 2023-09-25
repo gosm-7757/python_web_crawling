@@ -35,3 +35,21 @@ raw['카테고리'] = raw['상품목록'].apply(카테고리분류)
 print(raw)
 
 # 판다스의 데이터는 전부 다 오브젝트형이다.
+
+
+# 상품 목록에 MIRROR 또는 SOFA라는 영단어가 포함되어 있으면 카테고리 컬럼에 "가구"라고 기록하고 싶다.
+def 함수스(a):
+    if re.search('Mirror|Sofa', str(a)):
+        return "가구"
+    
+raw['카테고리'] = raw['상품목록'].apply(함수스)
+
+
+# 상품목록에 글자가 없고 숫자만 있으면 그 칸은 "에러"라는 단어로 바꾼다.
+def 에러(a):
+    if re.search("\D", str(a)) :
+        return "에러"
+    else:
+        return a
+    
+raw['상품목록'] = raw['상품목록'].apply(에러)
