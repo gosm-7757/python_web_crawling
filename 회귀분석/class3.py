@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.optimize import curve_fit
 import numpy as np
+import statsmodels.api as sm
 
 # 탭으로 구분된 파일을 열 때
 df = pd.read_table('./회귀분석/income.txt')
@@ -26,3 +27,4 @@ print(opt)
 x = np.array([1,2,3,4,5,6]) # 행렬에서 필요
 plt.plot(x, 함수(x, opt[0], opt[1], opt[2]))
 plt.show()
+
